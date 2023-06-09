@@ -11,9 +11,3 @@ int recurrence(int n) {
         return recurrence(n - 3) + recurrence(n - 2);
 }
 
-int main() {
-    int n = 10;
-    int result = recurrence(n);
-    printf("F(%d) = %d\n", n, result);
-    return 0;
-}
