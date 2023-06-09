@@ -12,9 +12,3 @@ int recurrence(int n) {
     return fib[n];
 }
 
-int main() {
-    int n = 10;
-    int result = recurrence(n);
-    printf("F(%d) = %d\n", n, result);
-    return 0;
-}
