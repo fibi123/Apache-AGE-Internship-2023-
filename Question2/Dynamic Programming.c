@@ -19,11 +19,3 @@ int recurrence(int n) {
     }
 }
 
-int main() {
-    int n = 10;
-    for (int i = 0; i < MAX_SIZE; i++)
-        memo[i] = -1;
-    int result = recurrence(n);
-    printf("F(%d) = %d\n", n, result);
-    return 0;
-}
