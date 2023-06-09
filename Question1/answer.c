@@ -1,85 +1,91 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node {
-    enum TypeTag {
-        ADD,
-        MUL,
-        SUB,
-        FIBO
-    } type;
+typedef enum TypeTag {
+    ADD,
+    MUL,
+    SUB,
+    DIV
+} TypeTag;
 
+typedef struct Node {
+    TypeTag type;
     int value;
     struct Node* left;
     struct Node* right;
 } Node;
 
-Node* makeNode(enum TypeTag type) {
+Node* makeFunc(TypeTag type, Node* left, Node* right) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->type = type;
-    newNode->value = 0;
-    newNode->left = NULL;
-    newNode->right = NULL;
-    return newNode;
-}
-
-Node* makeNumberNode(int value) {
-    Node* newNode = makeNode(FIBO);
-    newNode->value = value;
-    return newNode;
-}
-
-Node* makeFuncNode(enum TypeTag type, Node* left, Node* right) {
-    Node* newNode = makeNode(type);
     newNode->left = left;
     newNode->right = right;
     return newNode;
 }
 
+Node* makeNumber(int value) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->type = -1; 
+    newNode->value = value;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
 int fibonacci(int n) {
-    int fib[n + 1];
+    if (n <= 1)
+        return n;
+
+    int* fib = (int*)malloc((n + 1) * sizeof(int));
     fib[0] = 0;
     fib[1] = 1;
-  
+
     for (int i = 2; i <= n; i++)
         fib[i] = fib[i - 1] + fib[i - 2];
-  
-    return fib[n];
+
+    int result = fib[n];
+    free(fib);
+
+    return result;
 }
 
 void calc(Node* node) {
-    if (node->type == FIBO) {
-        node->value = fibonacci(node->value);
-        printf("fibo: %d\n", node->value);
+    if (node->type == -1) { 
+        printf("Number: %d\n", node->value);
+    } else if (node->type == ADD) {
+        calc(node->left);
+        calc(node->right);
+        node->value = node->left->value + node->right->value;
+        printf("add: %d\n", node->value);
+    } else if (node->type == MUL) {
+        calc(node->left);
+        calc(node->right);
+        node->value = node->left->value * node->right->value;
+        printf("mul: %d\n", node->value);
+    } else if (node->type == SUB) {
+        calc(node->left);
+        calc(node->right);
+        node->value = node->left->value - node->right->value;
+        printf("sub: %d\n", node->value);
+    } else if (node->type == DIV) {
+        calc(node->left);
+        calc(node->right);
+        node->value = node->left->value / node->right->value;
+        printf("div: %d\n", node->value);
     } else {
         calc(node->left);
         calc(node->right);
-        
-        switch (node->type) {
-            case ADD:
-                node->value = node->left->value + node->right->value;
-                printf("add: %d\n", node->value);
-                break;
-            case MUL:
-                node->value = node->left->value * node->right->value;
-                printf("mul: %d\n", node->value);
-                break;
-            case SUB:
-                node->value = node->left->value - node->right->value;
-                printf("sub: %d\n", node->value);
-                break;
-            default:
-                break;
-        }
+        node->value = fibonacci(node->value);
+        printf("fibo: %d\n", node->value);
     }
 }
 
 int main() {
-    Node* add = makeFuncNode(ADD, makeNumberNode(10), makeNumberNode(6));
-    Node* mul = makeFuncNode(MUL, makeNumberNode(5), makeNumberNode(4));
-    Node* sub = makeFuncNode(SUB, mul, add);
-    Node* fibo = makeFuncNode(SUB, sub, NULL);
-    printf("Output");
+    Node* add = makeFunc(ADD, makeNumber(10), makeNumber(6));
+    Node* mul = makeFunc(MUL, makeNumber(5), makeNumber(4));
+    Node* sub = makeFunc(SUB, mul, add);
+    Node* fibo = makeFunc(SUB, sub, NULL);
+    printf("Output:\n");
     calc(add);
     calc(mul);
     calc(sub);
