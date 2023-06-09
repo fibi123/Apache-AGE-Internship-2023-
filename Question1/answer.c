@@ -29,7 +29,7 @@ Node* makeNumberNode(int value) {
     return newNode;
 }
 
-Node* makeFNode(enum TypeTag type, Node* left, Node* right) {
+Node* makeFuncNode(enum TypeTag type, Node* left, Node* right) {
     Node* newNode = makeNode(type);
     newNode->left = left;
     newNode->right = right;
@@ -75,10 +75,10 @@ void calc(Node* node) {
 }
 
 int main() {
-    Node* add = makeFNode(ADD, makeNumberNode(10), makeNumberNode(6));
-    Node* mul = makeFNode(MUL, makeNumberNode(5), makeNumberNode(4));
-    Node* sub = makeFNode(SUB, mul, add);
-    Node* fibo = makeFNode(SUB, sub, NULL);
+    Node* add = makeFuncNode(ADD, makeNumberNode(10), makeNumberNode(6));
+    Node* mul = makeFuncNode(MUL, makeNumberNode(5), makeNumberNode(4));
+    Node* sub = makeFuncNode(SUB, mul, add);
+    Node* fibo = makeFuncNode(SUB, sub, NULL);
     printf("Output");
     calc(add);
     calc(mul);
