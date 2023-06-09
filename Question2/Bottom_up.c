@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int recurrence(int n) {
+int bottom_up(int n) {
     int fib[n + 1];
     fib[0] = 0;
     fib[1] = 1;
